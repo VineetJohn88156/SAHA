@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Saha - Your Menstrual Health Companion</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Swiper for Video Carousel -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none;
+        }
+
+        body {
+            font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+            overflow-x: hidden;
+            background: #FDF4E3;
+        }
+
+        /* Custom Cursor Animation */
+        .cursor {
+            width: 32px;
+            height: 32px;
+            border: 2.5px solid #E2725B;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            transform: translate(-50%, -50%);
+            backdrop-filter: blur(2px);
+            box-shadow: 0 0 8px rgba(226, 114, 91, 0.3);
+        }
+
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background: #FFB347;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: 0.08s ease;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 12px #FFB347;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 5px;
+            height: 5px;
+            background: rgba(226, 114, 91, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: 0.05s;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Moving Background */
+        .moving-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .bg-slider {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            animation: slideBackground 45s linear infinite;
+        }
+
+        .bg-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bg-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.2;
+            filter: brightness(0.95) contrast(1.05) blur(1px);
+        }
+
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(253, 244, 227, 0.92), rgba(253, 244, 227, 0.88));
+            z-index: 1;
+        }
+
+        @keyframes slideBackground {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-100%); }
+            50% { transform: translateX(-200%); }
+            75% { transform: translateX(-300%); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: absolute;
+            z-index: -1;
+            animation: floatElement 20s infinite ease-in-out;
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        @keyframes floatElement {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-40px) rotate(8deg); }
+        }
+
+        .element-1 { top: 12%; left: 3%; width: 85px; animation-duration: 24s; }
+        .element-2 { top: 75%; right: 5%; width: 110px; animation-duration: 28s; animation-delay: -5s; }
+        .element-3 { bottom: 10%; left: 8%; width: 70px; animation-duration: 22s; animation-delay: -8s; }
+        .element-4 { top: 45%; right: 12%; width: 80px; animation-duration: 30s; animation-delay: -12s; }
+        .element-5 { bottom: 35%; left: 85%; width: 65px; animation-duration: 26s; animation-delay: -18s; }
+        .element-6 { top: 20%; right: 25%; width: 55px; animation-duration: 32s; animation-delay: -3s; }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 8%;
+            background: rgba(253, 244, 227, 0.98);
+            backdrop-filter: blur(12px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 25px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #E2725B;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: #FFB347;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 35px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #4A3728;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #E2725B;
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #4A3728;
+            transition: 0.3s;
+            border-radius: 25px;
+            font-family: inherit;
+        }
+
+        .lang-btn.active {
+            background: #FFB347;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 120px 8% 80px;
+            gap: 50px;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 800;
+            color: #4A3728;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .hero-content h1 span {
+            color: #E2725B;
+            display: inline-block;
+            animation: gentleShake 3s infinite;
+        }
+
+        @keyframes gentleShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: #6B4E3A;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #E2725B, #FFB347);
+            color: white;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 18px rgba(226, 114, 91, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(226, 114, 91, 0.45);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #E2725B;
+            padding: 14px 40px;
+            border: 2px solid #E2725B;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #E2725B;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .hero-image {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+            animation: floatImage 4s ease-in-out infinite;
+        }
+
+        @keyframes floatImage {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .hero-image img {
+            max-width: 100%;
+            border-radius: 35px;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.12));
+        }
+
+        /* Other sections */
+        .videos-section, .features, .how-it-works, .research, .contact {
+            position: relative;
+            z-index: 2;
+        }
+
+        .videos-section {
+            padding: 80px 8%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+        }
+
+        .video-carousel {
+            margin-top: 50px;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .swiper {
+            width: 100%;
+            padding: 20px 0 40px;
+        }
+
+        .swiper-slide {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .swiper-slide:hover {
+            transform: translateY(-5px);
+        }
+
+        .video-card {
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+        }
+
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .video-thumbnail:hover img {
+            transform: scale(1.05);
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            background: rgba(226, 114, 91, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            transition: 0.3s;
+        }
+
+        .video-info {
+            padding: 20px;
+        }
+
+        .video-info h3 {
+            font-size: 18px;
+            color: #4A3728;
+            margin-bottom: 8px;
+        }
+
+        .video-info p {
+            font-size: 14px;
+            color: #6B4E3A;
+        }
+
+        .video-duration {
+            display: inline-block;
+            background: #F0E8DD;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+            color: #E2725B;
+        }
+
+        /* YouTube Modal */
+        .video-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 90%;
+            max-width: 1000px;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+        }
+
+        .modal-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: -45px;
+            right: 0;
+            background: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            color: #E2725B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .close-modal:hover {
+            background: #E2725B;
+            color: white;
+        }
+
+        .features {
+            padding: 80px 8%;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(4px);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 42px;
+            color: #4A3728;
+            margin-bottom: 50px;
+        }
+
+        .section-title span {
+            color: #E2725B;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 25px;
+            text-align: center;
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(226, 114, 91, 0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FFB34720, #E2725B20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 36px;
+            color: #E2725B;
+        }
+
+        .how-it-works {
+            padding: 80px 8%;
+            background: linear-gradient(135deg, #FFB34712, #E2725B12);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #E2725B, #FFB347);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .research {
+            padding: 80px 8%;
+            background: #4A3728;
+            color: white;
+            text-align: center;
+        }
+
+        .btn-outline-light {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline-light:hover {
+            background: white;
+            color: #4A3728;
+        }
+
+        .contact {
+            padding: 80px 8%;
+            background: white;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            margin-top: 50px;
+        }
+
+        .contact-info h3 {
+            font-size: 28px;
+            color: #4A3728;
+            margin-bottom: 20px;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            color: #6B4E3A;
+        }
+
+        .contact-detail i {
+            width: 40px;
+            height: 40px;
+            background: #FFB34720;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #E2725B;
+            font-size: 18px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-family: inherit;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .contact-form button {
+            background: linear-gradient(135deg, #E2725B, #FFB347);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .footer {
+            background: #2C241A;
+            color: white;
+            padding: 40px 8% 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #FFB347;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a {
+            display: block;
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #FFB347;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Notification Toast */
+        .toast-notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #4A3728;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 10000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            font-size: 14px;
+        }
+
+        .toast-notification.show {
+            transform: translateX(0);
+        }
+
+        .toast-notification i {
+            color: #FFB347;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+            .nav-links {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            .section-title {
+                font-size: 32px;
+            }
+            .btn-group {
+                justify-content: center;
+            }
+            .hero-content {
+                text-align: center;
+            }
+            .cursor, .cursor-dot, .cursor-trail {
+                display: none;
+            }
+            body {
+                cursor: auto;
+            }
+            .toast-notification {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                transform: translateY(100px);
+                text-align: center;
+                justify-content: center;
+            }
+            .toast-notification.show {
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Custom Cursor Elements -->
+<div class="cursor"></div>
+<div class="cursor-dot"></div>
+
+<!-- Moving Background -->
+<div class="moving-bg">
+    <div class="bg-slider">
+        <div class="bg-slide"><img src="https://images.pexels.com/photos/6153354/pexels-photo-6153354.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Indian Women Health"></div>
+        <div class="bg-slide"><img src="https://images.pexels.com/photos/6648085/pexels-photo-6648085.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Women Wellness"></div>
+        <div class="bg-slide"><img src="https://images.pexels.com/photos/3769029/pexels-photo-3769029.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Menstrual Health"></div>
+        <div class="bg-slide"><img src="https://images.pexels.com/photos/4482900/pexels-photo-4482900.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="Women Healthcare"></div>
+    </div>
+    <div class="bg-overlay"></div>
+</div>
+
+<!-- Floating Elements -->
+<div class="floating-element element-1"><img src="https://cdn-icons-png.flaticon.com/512/2843/2843892.png" width="85"></div>
+<div class="floating-element element-2"><img src="https://cdn-icons-png.flaticon.com/512/2917/2917995.png" width="110"></div>
+<div class="floating-element element-3"><img src="https://cdn-icons-png.flaticon.com/512/3037/3037062.png" width="70"></div>
+<div class="floating-element element-4"><img src="https://cdn-icons-png.flaticon.com/512/2920/2920333.png" width="80"></div>
+<div class="floating-element element-5"><img src="https://cdn-icons-png.flaticon.com/512/3236/3236687.png" width="65"></div>
+<div class="floating-element element-6"><img src="https://cdn-icons-png.flaticon.com/512/4415/4415215.png" width="55"></div>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="logo"><i class="fas fa-female"></i><span>SAHA</span></div>
+    <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#videos">Tutorials</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="language-switcher">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="hi">हिंदी</button>
+        <button class="lang-btn" data-lang="mr">मराठी</button>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section id="home" class="hero">
+    <div class="hero-content" data-aos="fade-right">
+        <h1>Your Friendly <span>Menstrual Health</span> Companion</h1>
+        <p id="hero-desc">Track your cycles, get AI-powered guidance, and contribute to important research. Available in Hindi, Marathi, and English.</p>
+        <div class="btn-group">
+            <a href="https://saha-care-flow.base44.app" target="_blank" rel="noopener noreferrer" class="btn-primary" id="visit-saha-btn">
+                <i class="fas fa-external-link-alt"></i> Visit Saha App
+            </a>
+            <a href="#" class="btn-secondary" id="take-survey-btn">
+                <i class="fas fa-clipboard-list"></i> Take Research Survey
+            </a>
+        </div>
+    </div>
+    <div class="hero-image" data-aos="fade-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/10435/10435779.png" alt="Menstrual Health Awareness">
+    </div>
+</section>
+
+<!-- Toast Notification for external link -->
+<div id="toastNotification" class="toast-notification">
+    <i class="fas fa-external-link-alt"></i>
+    <span>Opening Saha App in a new tab...</span>
+</div>
+
+<!-- Video Tutorials Section with all 6 requested YouTube videos -->
+<section id="videos" class="videos-section">
+    <h2 class="section-title" data-aos="fade-up">Educational <span>Video Tutorials</span></h2>
+    <p style="text-align: center; max-width: 700px; margin: 0 auto 30px; color: #6B4E3A;">Learn about menstrual health, hygiene products, and self-care through our curated tutorials</p>
+    <div class="video-carousel" data-aos="fade-up" data-aos-delay="100">
+        <div class="swiper videoSwiper">
+            <div class="swiper-wrapper">
+                <!-- Video 1: Complete Guide (zcvo9VLVHWc) -->
+                <div class="swiper-slide">
+                    <div class="video-card">
+                        <div class="video-thumbnail" data-video-id="zcvo9VLVHWc">
+                            <img src="https://img.youtube.com/vi/zcvo9VLVHWc/maxresdefault.jpg" alt="Menstrual Health Guide">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="video-info">
+                            <h3>Complete Guide to Menstrual Health & Hygiene</h3>
+                            <p>Expert insights on period care, hygiene products, and self-care tips</p>
+                            <span class="video-duration"><i class="fab fa-youtube"></i> Watch Now</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 2: How to Use a Menstrual Cup (hguXlPbZE9g) -->
+                <div class="swiper-slide">
+                    <div class="video-card">
+                        <div class="video-thumbnail" data-video-id="hguXlPbZE9g">
+                            <img src="https://img.youtube.com/vi/hguXlPbZE9g/maxresdefault.jpg" alt="Menstrual Cup Guide">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="video-info">
+                            <h3>How to Use a Menstrual Cup</h3>
+                            <p>Step-by-step guide for beginners - easy insertion and removal</p>
+                            <span class="video-duration"><i class="fab fa-youtube"></i> Watch Tutorial</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 3: 5 Natural Ways to Relieve Period Cramps (5u6Y6ZP2_Wg) -->
+                <div class="swiper-slide">
+                    <div class="video-card">
+                        <div class="video-thumbnail" data-video-id="5u6Y6ZP2_Wg">
+                            <img src="https://img.youtube.com/vi/5u6Y6ZP2_Wg/maxresdefault.jpg" alt="Natural Period Pain Relief">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="video-info">
+                            <h3>5 Natural Ways to Relieve Period Cramps</h3>
+                            <p>Easy home remedies for effective pain relief during periods</p>
+                            <span class="video-duration"><i class="fab fa-youtube"></i> Watch Now</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 4: Menstrual Hygiene Do's and Don'ts (qFLElwY-SYE) -->
+                <div class="swiper-slide">
+                    <div class="video-card">
+                        <div class="video-thumbnail" data-video-id="qFLElwY-SYE">
+                            <img src="https://img.youtube.com/vi/qFLElwY-SYE/maxresdefault.jpg" alt="Menstrual Hygiene Tips">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="video-info">
+                            <h3>Menstrual Hygiene: Do's and Don'ts</h3>
+                            <p>Essential hygiene practices for a healthy period experience</p>
+                            <span class="video-duration"><i class="fab fa-youtube"></i> Watch Guide</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 5: How to Use and Wash Cloth Pads (J6bZsI1pi_o) -->
+                <div class="swiper-slide">
+                    <div class="video-card">
+                        <div class="video-thumbnail" data-video-id="J6bZsI1pi_o">
+                            <img src="https://img.youtube.com/vi/J6bZsI1pi_o/maxresdefault.jpg" alt="Cloth Pads Guide">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="video-info">
+                            <h3>How to Use and Wash Cloth Pads</h3>
+                            <p>Eco-friendly menstrual product guide - proper care and usage</p>
+                            <span class="video-duration"><i class="fab fa-youtube"></i> Watch Tutorial</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Video 6: What to Eat During Periods (cXmqNnUvslg) -->
+                <div class="swiper-slide">
+                    <div class="video-card">
+                        <div class="video-thumbnail" data-video-id="cXmqNnUvslg">
+                            <img src="https://img.youtube.com/vi/cXmqNnUvslg/maxresdefault.jpg" alt="Nutrition During Periods">
+                            <div class="play-icon"><i class="fas fa-play"></i></div>
+                        </div>
+                        <div class="video-info">
+                            <h3>What to Eat During Periods</h3>
+                            <p>Nutrition tips for better menstrual health and reducing discomfort</p>
+                            <span class="video-duration"><i class="fab fa-youtube"></i> Watch Now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+</section>
+
+<!-- YouTube Modal -->
+<div id="videoModal" class="video-modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeVideoModal()"><i class="fas fa-times"></i></button>
+        <iframe id="youtubeIframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- Features Section -->
+<section id="features" class="features">
+    <h2 class="section-title">What <span>Saha</span> Offers</h2>
+    <div class="features-grid">
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-calendar-alt"></i></div><h3>Period Tracker</h3><p>Log cycles, predict periods, track symptoms</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-robot"></i></div><h3>AI Health Assistant</h3><p>Chat in Hindi, Marathi, or English</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-leaf"></i></div><h3>Sustainable Product Guide</h3><p>Eco-friendly menstrual products</p></div>
+        <div class="feature-card"><div class="feature-icon"><i class="fas fa-heartbeat"></i></div><h3>Symptom Logger</h3><p>Track cramps, mood, flow intensity</p></div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section id="how-it-works" class="how-it-works">
+    <h2 class="section-title">How <span>Saha</span> Works</h2>
+    <div class="steps">
+        <div class="step"><div class="step-number">1</div><h3>Sign Up Free</h3><p>Create your account in seconds</p></div>
+        <div class="step"><div class="step-number">2</div><h3>Complete Profile</h3><p>Personalize your experience</p></div>
+        <div class="step"><div class="step-number">3</div><h3>Track Your Cycle</h3><p>Log periods, symptoms, get predictions</p></div>
+        <div class="step"><div class="step-number">4</div><h3>Chat with AI</h3><p>Get answers in your language</p></div>
+    </div>
+</section>
+
+<!-- Research Section -->
+<section id="research" class="research">
+    <h2><i class="fas fa-chart-line"></i> Contribute to Menstrual Health Research</h2>
+    <p>This platform is part of a research study to understand menstrual health patterns and improve product accessibility and product quality for women across India. Your anonymous data helps us create better solutions and higher-quality products for everyone.</p>
+    <a href="#" class="btn-outline-light">Learn More About Research →</a>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" class="contact">
+    <h2 class="section-title">Get in <span>Touch</span></h2>
+    <div class="contact-container">
+        <div class="contact-info">
+            <h3>We'd love to hear from you</h3>
+            <div class="contact-detail"><i class="fas fa-envelope"></i><span>research@saha.org</span></div>
+            <div class="contact-detail"><i class="fas fa-phone"></i><span>+91 98765 43210</span></div>
+            <div class="contact-detail"><i class="fas fa-map-marker-alt"></i><span>Mumbai, India</span></div>
+            <div class="contact-detail"><i class="fab fa-whatsapp"></i><span>+91 98765 43210</span></div>
+        </div>
+        <div class="contact-form">
+            <form id="contact-form">
+                <input type="text" placeholder="Your Name" required>
+                <input type="email" placeholder="Your Email" required>
+                <textarea placeholder="Your Message"></textarea>
+                <button type="submit"><i class="fas fa-paper-plane"></i> Send Message</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <div><div class="footer-logo"><i class="fas fa-female"></i><span>SAHA</span></div><p style="margin-top:15px;">Your friendly menstrual health companion</p></div>
+        <div class="footer-links"><h4>Quick Links</h4><a href="#home">Home</a><a href="#features">Features</a><a href="#videos">Tutorials</a><a href="#research">Research</a></div>
+        <div class="footer-links"><h4>Legal</h4><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div>
+        <div class="footer-links"><h4>Follow Us</h4><a href="#"><i class="fab fa-instagram"></i> Instagram</a><a href="#"><i class="fab fa-facebook"></i> Facebook</a></div>
+    </div>
+    <div class="footer-bottom"><p>© 2024 Saha. All rights reserved. Made with <i class="fas fa-heart" style="color:#FFB347;"></i> for menstrual health awareness in India</p></div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    // Initialize AOS
+    AOS.init({ duration: 1000, once: true, offset: 100 });
+    
+    // Initialize Swiper
+    new Swiper('.videoSwiper', { 
+        slidesPerView: 1, 
+        spaceBetween: 20, 
+        loop: true, 
+        pagination: { el: '.swiper-pagination', clickable: true }, 
+        navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }, 
+        breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } } 
+    });
+
+    // YouTube Modal Logic
+    const videoModal = document.getElementById('videoModal');
+    const youtubeIframe = document.getElementById('youtubeIframe');
+    
+    function openYouTubeModal(videoId) {
+        if (!videoId) return;
+        youtubeIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1`;
+        videoModal.classList.add('active');
+    }
+    
+    window.closeVideoModal = () => {
+        youtubeIframe.src = '';
+        videoModal.classList.remove('active');
+    };
+    
+    // Attach click listeners to all video thumbnails with data-video-id
+    document.querySelectorAll('.video-thumbnail[data-video-id]').forEach(thumbnail => {
+        thumbnail.addEventListener('click', (e) => {
+            const videoId = thumbnail.getAttribute('data-video-id');
+            if (videoId) {
+                openYouTubeModal(videoId);
+            }
+        });
+    });
+    
+    videoModal.addEventListener('click', (e) => {
+        if (e.target === videoModal) {
+            closeVideoModal();
+        }
+    });
+    
+    // Toast notification for external link
+    const toast = document.getElementById('toastNotification');
+    let toastTimeout;
+    
+    function showToast(message) {
+        clearTimeout(toastTimeout);
+        toast.querySelector('span').textContent = message;
+        toast.classList.add('show');
+        toastTimeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 2000);
+    }
+    
+    const sahaBtn = document.getElementById('visit-saha-btn');
+    sahaBtn.addEventListener('click', (e) => {
+        showToast('Opening Saha App in a new tab...');
+    });
+    
+    // Custom Cursor & Trail
+    const cursor = document.querySelector('.cursor');
+    const cursorDot = document.querySelector('.cursor-dot');
+    let trailElements = [];
+    let trailPositions = [];
+    
+    for (let i = 0; i < 10; i++) { 
+        let trail = document.createElement('div'); 
+        trail.className = 'cursor-trail'; 
+        document.body.appendChild(trail); 
+        trailElements.push(trail); 
+    }
+    
+    let mouseX = 0, mouseY = 0;
+    document.addEventListener('mousemove', (e) => { 
+        mouseX = e.clientX; 
+        mouseY = e.clientY; 
+        cursor.style.left = mouseX + 'px'; 
+        cursor.style.top = mouseY + 'px'; 
+        cursorDot.style.left = mouseX + 'px'; 
+        cursorDot.style.top = mouseY + 'px'; 
+        trailPositions.unshift({ x: mouseX, y: mouseY }); 
+        if (trailPositions.length > 10) trailPositions.pop(); 
+        trailElements.forEach((trail, idx) => { 
+            if (trailPositions[idx]) { 
+                trail.style.left = trailPositions[idx].x + 'px'; 
+                trail.style.top = trailPositions[idx].y + 'px'; 
+                trail.style.opacity = 0.6 - (idx / 10); 
+                trail.style.transform = `translate(-50%, -50%) scale(${1 - (idx / 15)})`; 
+            } 
+        }); 
+    });
+    
+    const hoverEls = document.querySelectorAll('button, a, .feature-card, .step, .video-card');
+    hoverEls.forEach(el => { 
+        el.addEventListener('mouseenter', () => { 
+            cursor.style.width = '44px'; 
+            cursor.style.height = '44px'; 
+            cursor.style.borderColor = '#FFB347'; 
+            cursor.style.backgroundColor = 'rgba(255, 179, 71, 0.12)'; 
+            cursorDot.style.width = '10px'; 
+            cursorDot.style.height = '10px'; 
+            cursorDot.style.backgroundColor = '#E2725B'; 
+        }); 
+        el.addEventListener('mouseleave', () => { 
+            cursor.style.width = '32px'; 
+            cursor.style.height = '32px'; 
+            cursor.style.borderColor = '#E2725B'; 
+            cursor.style.backgroundColor = 'transparent'; 
+            cursorDot.style.width = '8px'; 
+            cursorDot.style.height = '8px'; 
+            cursorDot.style.backgroundColor = '#FFB347'; 
+        }); 
+    });
+    
+    document.addEventListener('mouseleave', () => { 
+        cursor.style.opacity = '0'; 
+        cursorDot.style.opacity = '0'; 
+        trailElements.forEach(t => t.style.opacity = '0'); 
+    });
+    
+    document.addEventListener('mouseenter', () => { 
+        cursor.style.opacity = '1'; 
+        cursorDot.style.opacity = '1'; 
+    });
+    
+    // Language Switcher
+    const translations = {
+        en: { desc: "Track your cycles, get AI-powered guidance, and contribute to important research. Available in Hindi, Marathi, and English.", visit: " Visit Saha App", survey: " Take Research Survey" },
+        hi: { desc: "अपने चक्र को ट्रैक करें, AI-संचालित मार्गदर्शन प्राप्त करें, और महत्वपूर्ण शोध में योगदान दें। हिंदी, मराठी और अंग्रेजी में उपलब्ध।", visit: " साहा ऐप पर जाएं", survey: " शोध सर्वेक्षण लें" },
+        mr: { desc: "तुमचे चक्र ट्रॅक करा, AI-आधारित मार्गदर्शन मिळवा आणि महत्त्वाच्या संशोधनात योगदान द्या. हिंदी, मराठी आणि इंग्रजीमध्ये उपलब्ध.", visit: " साहा अॅपला भेट द्या", survey: " संशोधन सर्वेक्षण घ्या" }
+    };
+    
+    const langBtns = document.querySelectorAll('.lang-btn');
+    const heroDesc = document.getElementById('hero-desc');
+    const surveyBtn = document.getElementById('take-survey-btn');
+    const visitBtnSpan = document.getElementById('visit-saha-btn');
+    
+    langBtns.forEach(btn => { 
+        btn.addEventListener('click', () => { 
+            langBtns.forEach(b => b.classList.remove('active')); 
+            btn.classList.add('active'); 
+            const lang = btn.dataset.lang; 
+            heroDesc.textContent = translations[lang].desc; 
+            visitBtnSpan.innerHTML = `<i class="fas fa-external-link-alt"></i>${translations[lang].visit}`;
+            surveyBtn.innerHTML = `<i class="fas fa-clipboard-list"></i>${translations[lang].survey}`; 
+        }); 
+    });
+    
+    document.getElementById('take-survey-btn').href = "https://your-saha-app.com/survey/pre-assessment";
+    
+    document.getElementById('contact-form').addEventListener('submit', (e) => { 
+        e.preventDefault(); 
+        alert('Thank you for reaching out! We will get back to you soon.'); 
+        e.target.reset(); 
+    });
+</script>
+</body>
+</html>
